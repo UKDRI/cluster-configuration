@@ -1,0 +1,8 @@
+---
+
+azure_hpc:
+  hosts:
+    localhost:
+      ansible_connection: local
+  vars:
+    scheduler_id: "ukdri-cluster1-scheduler"

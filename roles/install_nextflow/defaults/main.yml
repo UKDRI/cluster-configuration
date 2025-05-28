@@ -1,0 +1,6 @@
+---
+
+nextflow_version: "24.10.0"
+nextflow_checksum: "sha1:c142828a82fa6678a5af978d3545bb7f56072be6"
+nextflow_bin_path: "/usr/local/bin"
+nextflow_exe: "{{nextflow_bin_path}}/nextflow"

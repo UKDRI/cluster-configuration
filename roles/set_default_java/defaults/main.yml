@@ -1,0 +1,7 @@
+---
+
+# The headless package contains the java binary, if for some reason you need the jawt
+# library, java-17-openjdk.x86_64 should be installed instead
+java_yum_package_name: java-17-openjdk-headless.x86_64
+# The version of Nextflow we are using, 24.10.0 needs Java 17 but not the latest
+java_version: 17.0.0

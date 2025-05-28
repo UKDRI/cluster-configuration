@@ -1,0 +1,7 @@
+---
+
+- name: "Install {{softwares_list | length}} softwares"
+  ansible.builtin.dnf:
+    name: "{{softwares_list}}"
+    state: "present"
+  become: true
