@@ -1,0 +1,8 @@
+---
+
+- name: Install software one by one
+  ansible.builtin.dnf:
+    name: "{{ item }}"
+    state: "present"
+  loop: "{{ software_list_itemise }}"
+  become: true
