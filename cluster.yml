@@ -4,22 +4,15 @@
   
   tasks:
 
-    - name: "Install software on {{scheduler_id}}"
-      when: ansible_facts["hostname"] == scheduler_id
-      block:
+  - name: Ansible facts
+    ansible.builtin.debug:
+      var: ansible_facts
 
-      - name: Set default Java for Nextflow
-        include_role:
-          name: set_default_java
+  - name: Gather the package facts
+    ansible.builtin.package_facts:
+      manager: auto
 
-      - name: Install Nextflow
-        include_role:
-          name: install_nextflow
+  - name: Print the package facts
+    ansible.builtin.debug:
+      var: ansible_facts.packages
 
-      - name: Install softwares
-        include_role:
-          name: install_software
-
-    - name: Install singularity
-      include_role:
-        name: install_itemised_software

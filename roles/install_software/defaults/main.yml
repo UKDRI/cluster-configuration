@@ -2,3 +2,4 @@
 
 softwares_list:
   - "vim-enhanced.x86_64"
+  - "apptainer.x86_64"
