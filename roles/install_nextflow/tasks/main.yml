@@ -16,16 +16,15 @@
     changed_when: false
     register: temp_download_dir
   
-#  - name: Download Nextflow from GitHub
-#    ansible.builtin.get_url:
-#      url: "https://github.com/nextflow-io/nextflow/releases/download/v{{nextflow_version}}/nextflow"
-#      checksum: "{{nextflow_checksum}}"
-#      dest: "{{temp_download_dir.path}}"
-#      decompress: false
-#  
-#  - name: "Copy nextflow binary to {{nextflow_bin_path}}"
-#    ansible.builtin.copy:
-#      dest: "{{nextflow_exe}}"
-#      src: "{{temp_download_dir.path}}/nextflow"
-#      mode: "0755"
-#    become: true
+  - name: Download Nextflow from GitHub
+    ansible.builtin.get_url:
+      url: "https://github.com/nextflow-io/nextflow/releases/download/v{{nextflow_version}}/nextflow"
+      checksum: "{{nextflow_checksum}}"
+      dest: "{{temp_download_dir.path}}"
+  
+  - name: "Copy nextflow binary to {{nextflow_bin_path}}"
+    ansible.builtin.copy:
+      dest: "{{nextflow_exe}}"
+      src: "{{temp_download_dir.path}}/nextflow"
+      mode: "0755"
+    become: true
