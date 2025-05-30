@@ -12,6 +12,14 @@
         include_role:
           name: set_default_java
 
+      - name: Install Nextflow
+        include_role:
+          name: install_nextflow
+
       - name: Install softwares
         include_role:
           name: install_software
+
+    - name: Install singularity
+      include_role:
+        name: install_itemised_software
