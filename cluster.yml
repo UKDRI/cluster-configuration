@@ -20,6 +20,3 @@
         include_role:
           name: install_software
 
-    - name: Install singlarity
-      include_role:
-        name: install_itemised_software
