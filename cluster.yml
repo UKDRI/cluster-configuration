@@ -20,3 +20,6 @@
         include_role:
           name: install_software
 
+      - name: Add UK DRI users to docker group
+        include_role:
+          name: add_users_to_docker
