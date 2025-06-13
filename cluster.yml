@@ -1,25 +1,25 @@
 ---
 
-- hosts: all
-  
+- name: Prepare cluster for compute
+  hosts: all
   tasks:
 
-    - name: "Install software on {{scheduler_id}}"
+    - name: "Install software on {{ scheduler_id }}"
       when: ansible_facts["hostname"] == scheduler_id
       block:
 
-      - name: Set default Java for Nextflow
-        include_role:
-          name: set_default_java
+        - name: Set default Java for Nextflow
+          ansible.builtin.include_role:
+            name: set_default_java
 
-      - name: Install Nextflow
-        include_role:
-          name: install_nextflow
+        - name: Install Nextflow
+          ansible.builtin.include_role:
+            name: install_nextflow
 
-      - name: Install softwares
-        include_role:
-          name: install_software
+        - name: Install softwares
+          ansible.builtin.include_role:
+            name: install_software
 
-      - name: Add UK DRI users to docker group
-        include_role:
-          name: add_users_to_docker
+        - name: Add UK DRI users to docker group
+          ansible.builtin.include_role:
+            name: add_users_to_docker

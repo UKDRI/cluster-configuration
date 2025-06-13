@@ -1,7 +1,7 @@
 ---
 
-- name: "Install {{softwares_list | length}} softwares"
+- name: "Install softwares"
   ansible.builtin.dnf:
-    name: "{{softwares_list}}"
+    name: "{{ install_software_list }}"
     state: "present"
   become: true

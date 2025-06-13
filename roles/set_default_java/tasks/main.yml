@@ -2,24 +2,26 @@
 
 - name: Install Java 17 if not present
   ansible.builtin.dnf:
-    name: "{{java_yum_package_name}}"
+    name: "{{ set_default_java_yum_package_name }}"
     state: "present"
     install_weak_deps: false
   become: true
 
 - name: Retrieve Java version
-  ansible.builtin.shell: java -version
-  register: default_java_version
+  ansible.builtin.command: java -version
+  register: default_set_default_java_version
   changed_when: false
 
-- name: "Set default Java if not version {{java_version}}"
-  when: default_java_version.stderr_lines | regex_search('version [^0-9]?([0-9.]+)', '\\1') | first is version(java_version, '<')
+- name: "Set default Java if not version {{ set_default_java_version }}"
+  when: default_set_default_java_version.stderr_lines | regex_search('version [^0-9]?([0-9.]+)', '\\1') | first is version(set_default_java_version, '<')
   block:
-    - name: Get java binary path
-      ansible.builtin.shell: "rpm -ql {{java_yum_package_name}}"
-      register: java_package_list
+    - name: Get java binary path # noqa: command-instead-of-module
+      ansible.builtin.command: "rpm -ql {{ set_default_java_yum_package_name }}"
+      register: set_default_java_package_list
+      changed_when: set_default_java_package_list.rc != 0
 
     - name: Set Java 17 as default
-      ansible.builtin.shell: "alternatives --set java {{java_package_list.stdout_lines |regex_search('[a-zA-Z0-9/.\\-_]+/bin/java')}}"
+      ansible.builtin.command: "alternatives --set java {{ set_default_java_package_list.stdout_lines | regex_search('[a-zA-Z0-9/.\\-_]+/bin/java') }}"
+      register: set_default_java
+      changed_when: set_default_java.rc != 0
       become: true
-

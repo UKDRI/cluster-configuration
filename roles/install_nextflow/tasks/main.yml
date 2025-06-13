@@ -1,30 +1,32 @@
 ---
 
 - name: Check Nextflow is present
-  ansible.builtin.shell: which nextflow
+  ansible.builtin.command: which nextflow
   failed_when: which_result.rc > 1
-  changed_when: nextflow_exe != which_result.stdout
+  changed_when: install_nextflow_exe != which_result.stdout
   register: which_result
 
 - name: Install Nextflow
-  when: nextflow_exe != which_result.stdout
+  when: install_nextflow_exe != which_result.stdout
   block:
 
-  - name: Create temporary directory
-    ansible.builtin.tempfile:
-      state: directory
-    changed_when: false
-    register: temp_download_dir
-  
-  - name: Download Nextflow from GitHub
-    ansible.builtin.get_url:
-      url: "https://github.com/nextflow-io/nextflow/releases/download/v{{nextflow_version}}/nextflow"
-      checksum: "{{nextflow_checksum}}"
-      dest: "{{temp_download_dir.path}}"
-  
-  - name: "Copy nextflow binary to {{nextflow_bin_path}}"
-    ansible.builtin.copy:
-      dest: "{{nextflow_exe}}"
-      src: "{{temp_download_dir.path}}/nextflow"
-      mode: "0755"
-    become: true
+    - name: Create temporary directory
+      ansible.builtin.tempfile:
+        state: directory
+      changed_when: false
+      register: temp_download_dir
+
+    - name: Download Nextflow from GitHub
+      ansible.builtin.get_url:
+        url: "https://github.com/nextflow-io/nextflow/releases/download/v{{ install_nextflow_version }}/nextflow"
+        checksum: "{{ install_nextflow_checksum }}"
+        dest: "{{ temp_download_dir.path }}"
+        mode: "0600"
+
+
+    - name: "Copy nextflow binary to {{ install_nextflow_bin_path }}"
+      ansible.builtin.copy:
+        dest: "{{ install_nextflow_exe }}"
+        src: "{{ temp_download_dir.path }}/nextflow"
+        mode: "0755"
+      become: true

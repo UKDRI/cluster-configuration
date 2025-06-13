@@ -1,4 +1,5 @@
 ---
 
-softwares_list:
-  - "vim-enhanced.x86_64"
+install_software_list:
+  - "vim-enhanced"
+  - "mariadb-server"
