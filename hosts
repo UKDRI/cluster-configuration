@@ -5,4 +5,4 @@ azure_hpc:
     localhost:
       ansible_connection: local
   vars:
-    scheduler_id: "ukdri-cluster1-scheduler"
+    scheduler_id: "ukdri-cluster2-scheduler"
