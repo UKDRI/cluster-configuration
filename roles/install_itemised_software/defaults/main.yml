@@ -1,5 +1,0 @@
----
-
-software_list_itemise:
-  - "epel-release"
-  - "singularity-ce"
