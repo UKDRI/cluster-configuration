@@ -1,0 +1,10 @@
+---
+
+- name: Get full list of users
+  ansible.builtin.shell:
+    cmd: |
+      set -o pipefail
+      getent passwd | awk -F ':' '{{ get_users_awk_test }} {print $1}'
+    executable: /bin/bash
+  register: selected_users
+  changed_when: selected_users.rc != 0
