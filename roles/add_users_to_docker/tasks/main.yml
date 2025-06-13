@@ -1,0 +1,19 @@
+---
+
+- name: Get list of users
+  ansible.builtin.include_role:
+    name: get_users
+
+- name: Debug
+  ansible.builtin.debug:
+    var: selected_users
+
+- name: Add users to docker group
+  ansible.builtin.user:
+    name: "{{ item }}"
+    groups: "docker"
+    append: true
+    create_home: false # This seems to be needed to avoid updates
+    update_password: "on_create" # This seems to be needed to avoid updates
+  become: true
+  loop: "{{ selected_users.stdout_lines }}"
