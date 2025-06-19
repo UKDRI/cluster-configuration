@@ -1,0 +1,17 @@
+---
+
+- name: Execute MySQL command with password
+  ansible.builtin.command:
+    cmd: |
+      mysql -h {{ mysql_command_host }} -P {{ mysql_command_port }} -u {{ mysql_command_user }} -p{{ mysql_command_password }} -e "{{ mysql_command_cmd | join(';') }}"
+  register: mysql_command_out
+  changed_when: mysql_command_out.stdout in "Query OK"
+  when: mysql_command_password is defined
+
+- name: Execute MySQL command without password
+  ansible.builtin.command:
+    cmd: |
+      mysql -h {{ mysql_command_host }} -P {{ mysql_command_port }} -u {{ mysql_command_user }} -e "{{ mysql_command_cmd | join(';') }}"
+  register: mysql_command_out
+  changed_when: mysql_command_out.stdout in "Query OK"
+  when: mysql_command_password is not defined
