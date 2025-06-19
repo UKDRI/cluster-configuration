@@ -2,4 +2,4 @@
 
 install_software_list:
   - "vim-enhanced"
-  - "mariadb-server"
+  - "screen"
