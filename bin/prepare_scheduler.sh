@@ -1,5 +1,5 @@
 #!/usr/bin/bash
 
-sudo dnf install -y  --setopt=install_weak_deps=False ansible-core
+python3 -m pip install ansible-core ansible-lint
 
 ansible-playbook cluster.yml
