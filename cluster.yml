@@ -4,6 +4,22 @@
   hosts: all
   tasks:
 
+    - name: Get cluster config
+      ansible.builtin.command:
+        cmd: scontrol show config
+      changed_when: scontrol_show_config.rc != 0
+      register: scontrol_show_config
+
+    - name: Get cluster name
+      ansible.builtin.set_fact:
+        cluster_name: "{{ item | regex_search('ClusterName += +(.+)', '\\1') | first }}"
+      loop: "{{ scontrol_show_config.stdout_lines }}"
+      when: "'ClusterName' in item"
+
+    - name: Get cluster name
+      ansible.builtin.set_fact:
+        scheduler_id: "{{ (cluster_name, 'scheduler') | join('-') }}"
+
     - name: "Install software on {{ scheduler_id }}"
       when: ansible_facts["hostname"] == scheduler_id
       block:
