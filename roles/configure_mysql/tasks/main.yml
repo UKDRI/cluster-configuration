@@ -1,0 +1,49 @@
+---
+
+- name: Install MySQL package
+  ansible.builtin.include_role:
+    name: install_software
+  vars:
+    install_software_list: "{{ configure_mysql_packages }}"
+
+- name: Configure MySQL server
+  block:
+    - name: Configure MySQL server variables
+      ansible.builtin.lineinfile:
+        path: /etc/my.cnf.d/mariadb-server.cnf
+        regex: '^#? {{ item.name }}='
+        line: "{{ item.name }}={{ item.value }}"
+        insertafter: 'pid-file'
+      loop: "{{ configure_mysql_server_variables }}"
+      become: true
+
+    - name: Start MySQL service
+      ansible.builtin.systemd:
+        name: 'mariadb'
+        state: "restarted"
+  become: true
+
+- name: Get root MySQL password
+  ansible.builtin.set_fact:
+    configure_mysql_root_password: "{{ lookup('ansible.builtin.password', '~/.mysql', chars=['ascii_letters', 'digits']) }}"
+  when: configure_mysql_root_password is not defined
+
+- name: Configure root user
+  ansible.builtin.include_role:
+    name: mysql_command
+  vars:
+    mysql_command_user: 'root'
+    mysql_command_host: "{{ configure_mysql_host }}"
+    mysql_command_port: "{{ configure_mysql_dbport }}"
+    mysql_command_cmd: "{{ configure_mysql_configure_root_sql }}"
+
+
+- name: Configure slurm user
+  ansible.builtin.include_role:
+    name: mysql_command
+  vars:
+    mysql_command_user: 'root'
+    mysql_command_password: "{{ configure_mysql_root_password }}"
+    mysql_command_host: "{{ configure_mysql_host }}"
+    mysql_command_port: "{{ configure_mysql_dbport }}"
+    mysql_command_cmd: "{{ configure_mysql_configure_users_sql }}"

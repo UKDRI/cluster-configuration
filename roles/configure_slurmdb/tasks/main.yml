@@ -1,0 +1,47 @@
+---
+
+- name: Configure /etc/slurm/accounting.conf
+  ansible.builtin.lineinfile:
+    path: /etc/slurm/accounting.conf
+    regex: "^{{ item.name }}="
+    line: "{{ item.name }}={{ item.value }}"
+  loop: "{{ configure_slurmdbd_accounting_conf }}"
+  become: true
+
+- name: Configure /etc/slurm/slurmdbd.conf
+  block:
+
+    - name: Create slurmdbd.conf from example file
+      ansible.builtin.copy:
+        src: /etc/slurm/slurmdbd.conf.example
+        dest: "/sched/{{ configure_slurmdb_cluster_name }}/slurmdbd.conf"
+        mode: '0600'
+        owner: 'slurm'
+        group: 'slurm'
+      when: ('/sched', cluster_name, 'slurmdbd.conf') | join('/') | string is not exists
+
+    - name: Create slurmdbd.conf symlink in /etc/slurm
+      ansible.builtin.file:
+        src: "/sched/{{ configure_slurmdb_cluster_name }}/slurmdbd.conf"
+        dest: /etc/slurm/slurmdbd.conf
+        owner: 'root'
+        group: 'root'
+        state: "link"
+      when: "'/etc/slurm/slurmdbd.conf' is not exists"
+
+    - name: Configure slurmdbd.conf
+      ansible.builtin.lineinfile:
+        path: /etc/slurm/slurmdbd.conf
+        regex: '^#?StoragePort='
+        line: "StoragePort={{ configure_slurmdb_mysql_port }}"
+      loop: "{{ configure_slurmdb_slurmdbd_conf }}"
+
+    - name: Setup SlurmDBD var directory
+      ansible.builtin.file:
+        path: "{{ item }}"
+        group: 'slurm'
+        owner: 'slurm'
+        mode: '0755'
+        state: "directory"
+      loop: "{{ configure_slurmdb_var_directories }}"
+  become: true

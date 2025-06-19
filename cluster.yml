@@ -39,3 +39,43 @@
         - name: Add UK DRI users to docker group
           ansible.builtin.include_role:
             name: add_users_to_docker
+
+        - name: Check Slurm Accounting is enabled
+          ansible.builtin.command:
+            cmd: sacct
+          ignore_errors: true
+          changed_when: is_sacct_enabled.rc != 0
+          register: is_sacct_enabled
+        
+        - name: Configure Slurm Accounting
+          when: is_sacct_enabled.rc == 1
+          block:
+
+          - name: Create new SlurmDB password
+            ansible.builtin.set_fact:
+              slurmdb_password: "{{ lookup('ansible.builtin.password', '/dev/null', chars=['ascii_letters', 'digits']) }}"
+            when: slurmdb_password is not defined
+
+          - name: Configure SlurmDBD
+            ansible.builtin.include_role:
+              name: configure_slurmdb
+            vars:
+              configure_slurmdb_password: "{{ slurmdb_password }}"
+
+          - name: Configure MySQL
+            ansible.builtin.include_role:
+              name: configure_mysql
+            vars:
+              configure_mysql_slurm_password: "{{ slurmdb_password }}"
+
+          - name: Restart SlurmDBD
+            ansible.builtin.systemd:
+              name: "slurmdbd"
+              state: "restarted"
+            become: true
+
+          - name: Restart SlurmCtl
+            ansible.builtin.systemd:
+              name: "slurmctl"
+              state: "restarted"
+            become: true

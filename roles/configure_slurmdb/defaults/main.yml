@@ -1,0 +1,20 @@
+---
+
+configure_slurmdb_sheduler_name: "{{ scheduler_id }}"
+configure_slurmdb_mysql_port: "{{ mysql_dbport }}"
+
+configure_slurmdbd_accounting_conf:
+  - name: 'AccountingStorageType'
+    value: 'accounting_storage/slurmdbd'
+  - name: 'JobCompType'
+    value: 'jobcomp/mysql'
+  - name: 'JobCompUser'
+    value: 'slurm'
+  - name: 'JobCompPass'
+    value: "{{ configure_slurmdb_password | quote }}"
+
+configure_slurmdbd_slurmdbd_conf:
+  - name: 'StoragePort'
+    value: "{{ configure_slurmdb_mysql_port }}"
+  - name: 'StoragePass'
+    value: "{{ configure_slurmdb_password | quote }}"

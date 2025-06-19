@@ -1,0 +1,32 @@
+---
+
+configure_mysql_host: 'localhost'
+configure_mysql_dbport: 3306
+configure_mysql_sheduler_name: "{{ scheduler_id }}"
+configure_mysql_slurm_user: 'slurm'
+configure_mysql_packages:
+  - "mariadb-server"
+
+configure_mysql_server_variables:
+  - name: innodb_buffer_pool_size
+    value: '4096M'
+  - name: innodb_lock_wait_timeout
+    value: '1024M'
+  - name: innodb_log_file_size
+    value: '900'
+  - name: max_allowed_packet
+    value: '1024M'
+
+configure_mysql_configure_root_sql:
+  - "ALTER USER 'root'@'localhost' IDENTIFIED BY '{{ configure_mysql_root_password }}'"
+  - "ALTER USER 'root'@'127.0.0.1' IDENTIFIED BY '{{ configure_mysql_root_password }}'"
+  - "ALTER USER 'root'@'::1' IDENTIFIED BY '{{ configure_mysql_root_password }}'"
+  - "DELETE FROM mysql.user WHERE User=''"
+  - "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')"
+  - "FLUSH PRIVILEGES"
+
+configure_mysql_configure_users_sql:
+  - "CREATE USER '{{ configure_mysql_slurm_user }}'@'localhost' IDENTIFIED BY '{{ configure_mysql_slurm_password }}'"
+  - "GRANT ALL ON *.* TO '{{ configure_mysql_slurm_user }}'@'localhost'"
+  - "CREATE USER '{{ configure_mysql_slurm_user }}'@'{{ configure_mysql_sheduler_name }}' IDENTIFIED BY '{{ configure_mysql_slurm_password }}'"
+  - "GRANT ALL ON *.* TO '{{ configure_mysql_slurm_user }}'@'{{ configure_mysql_sheduler_name }}'"
