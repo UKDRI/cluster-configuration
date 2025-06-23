@@ -29,6 +29,12 @@
         state: "link"
       when: "'/etc/slurm/slurmdbd.conf' is not exists"
 
+    - name: Configure slurm.conf
+      ansible.builtin.lineinfile:
+        path: /etc/slurm/slurm.conf
+        regex: '^#?JobAcctGatherType='
+        line: "JobAcctGatherType=jobacct_gather/cgroup"
+
     - name: Configure slurmdbd.conf
       ansible.builtin.lineinfile:
         path: /etc/slurm/slurmdbd.conf
