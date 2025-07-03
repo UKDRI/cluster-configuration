@@ -38,8 +38,8 @@
     - name: Configure slurmdbd.conf
       ansible.builtin.lineinfile:
         path: /etc/slurm/slurmdbd.conf
-        regex: '^#?StoragePort='
-        line: "StoragePort={{ configure_slurmdb_mysql_port }}"
+        regex: '^#?{{ item.name }}='
+        line: "{{ item.name }}={{ item.value }}"
       loop: "{{ configure_slurmdb_slurmdbd_conf }}"
 
     - name: Setup SlurmDBD var directory
