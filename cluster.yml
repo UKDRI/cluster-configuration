@@ -76,6 +76,6 @@
 
           - name: Restart SlurmCtl
             ansible.builtin.systemd:
-              name: "slurmctl"
+              name: "slurmctld"
               state: "restarted"
             become: true
