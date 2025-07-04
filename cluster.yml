@@ -32,6 +32,10 @@
           ansible.builtin.include_role:
             name: install_nextflow
 
+        - name: Configure Nextflow
+          ansible.builtin.include_role:
+            name: configure_nextflow
+
         - name: Install softwares
           ansible.builtin.include_role:
             name: install_software

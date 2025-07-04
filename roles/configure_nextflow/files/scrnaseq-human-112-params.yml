@@ -1,0 +1,10 @@
+---
+
+monochrome_logs: true # This is not an option in the doc, but nf-core complains 
+fasta: "/shared/data/genomes/GRCh38/Homo_sapiens.GRCh38.dna.primary_assembly.fa"
+gtf: "/shared/data/genomes/GRCh38/112/Homo_sapiens.GRCh38.112.gtf"
+# simpleaf_index: "/shared/data/genomes/GRCh38/112/simpleaf_index/index"
+# txp2gene: "/shared/data/genomes/GRCh38/112/simpleaf_index/ref/"
+#star_index: "/shared/data/genomes/GRCh38/112/star_index"
+#kallisto_index: "/shared/data/genomes/GRCh38/112/kallisto_index"
+#cellranger_index: "/shared/data/genomes/GRCh38/112/cellranger_index"
