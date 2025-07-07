@@ -15,6 +15,8 @@
     - name: Unzip Ensembl file
       ansible.builtin.command:
         cmd: "gunzip {{ fetch_ensembl_data_tmpdir.path }}/{{ fetch_ensembl_data_filename }}"
+        removes: "{{ fetch_ensembl_data_tmpdir.path }}/{{ fetch_ensembl_data_filename }}"
+        creates: "{{ fetch_ensembl_data_tmpdir.path }}/{{ fetch_ensembl_data_filename | splitext | first }}"
     
     - name: Copy Ensembl file to shared location
       ansible.builtin.copy:
