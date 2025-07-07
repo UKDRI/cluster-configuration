@@ -18,7 +18,7 @@
         mode: '0600'
         owner: 'slurm'
         group: 'slurm'
-      when: ('/sched', cluster_name, 'slurmdbd.conf') | join('/') | string is not exists
+      when: ('/sched', cluster_name, 'slurmdbd.conf') | path_join | string is not exists
 
     - name: Create slurmdbd.conf symlink in /etc/slurm
       ansible.builtin.file:
