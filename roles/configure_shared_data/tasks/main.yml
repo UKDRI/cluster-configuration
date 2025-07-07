@@ -1,0 +1,12 @@
+---
+
+- name: Get files for each species
+  ansible.builtin.include_role:
+    name: retrieve_genome_data
+  vars:
+    retrieve_genome_data_species_name: "{{ species_info.name }}"
+    retrieve_genome_data_genome_version: "{{ species_info.version }}"
+    retrieve_genome_data_gprofiler_species_name: "{{ species_info.gprofiler_name }}"
+  loop: "{{ configure_shared_data_species_list }}"
+  loop_control:
+    loop_var: species_info

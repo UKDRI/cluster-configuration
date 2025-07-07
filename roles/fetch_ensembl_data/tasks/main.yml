@@ -1,0 +1,25 @@
+---
+
+- name: Download Ensembl data from FTP
+  block:
+    - name: Create temporary directory
+      ansible.builtin.tempfile:
+        state: directory
+      register: fetch_ensembl_data_tmpdir
+
+    - name: Download Ensembl file
+      ansible.builtin.get_url:
+        url: "{{ fetch_ensembl_data_url | path_join }}"
+        dest: "{{ fetch_ensembl_data_tmpdir.path }}"
+
+    - name: Unzip Ensembl file
+      ansible.builtin.command:
+        cmd: "gunzip {{ fetch_ensembl_data_tmpdir.path }}/{{ fetch_ensembl_data_filename }}"
+    
+    - name: Copy Ensembl file to shared location
+      ansible.builtin.copy:
+        src: "{{ fetch_ensembl_data_tmpdir.path }}/{{ fetch_ensembl_data_filename | splitext | first }}"
+        dest: "{{ fetch_ensembl_data_destdir }}"
+        mode: "664"
+        group: "cyclecloud"
+  when: ( fetch_ensembl_data_destdir, fetch_ensembl_data_filename ) | path_join | splitext | first | string is not exists

@@ -83,3 +83,7 @@
               name: "slurmctld"
               state: "restarted"
             become: true
+
+        - name: Configure and get shared data files
+          ansible.builtin.include_role:
+            name: configure_shared_data

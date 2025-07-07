@@ -1,0 +1,12 @@
+---
+
+fetch_ensembl_data_filetype: "fasta"
+
+fetch_ensembl_data_url:
+  - "ftp://ftp.ensembl.org"
+  - "pub"
+  - "{{ fetch_ensembl_data_release }}"
+  - "{{ fetch_ensembl_data_filetype }}"
+  - "{{ fetch_ensembl_data_species_name }}"
+  - "{{ fetch_ensembl_data_datatype }}"
+  - "{{ fetch_ensembl_data_filename }}"

@@ -1,0 +1,9 @@
+---
+
+retrieve_genome_data_root_path: "/shared/data/genomes"
+
+# It might be best to follow gProfiler version so it is not out of sync
+retrieve_genome_data_ensembl_releases:
+  - 113
+
+retrieve_genome_data_gprofiler_root: "https://biit.cs.ut.ee/gprofiler"

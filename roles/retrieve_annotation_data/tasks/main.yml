@@ -1,0 +1,19 @@
+---
+
+- name: Create release version directory
+  ansible.builtin.file:
+    name: "{{ retrieve_annotation_data_species_release_data_path }}"
+    state: "directory"
+    group: "cyclecloud"
+    mode: "775"
+
+- name: Get annotation GTF file
+  ansible.builtin.include_role:
+    name: "fetch_ensembl_data"
+  vars:
+    fetch_ensembl_data_release: "release-{{ retrieve_annotation_data_ensembl_release_version }}"
+    fetch_ensembl_data_species_name: "{{ retrieve_genome_data_species_name | lower }}"
+    fetch_ensembl_data_filetype: "gtf"
+    fetch_ensembl_data_datatype: ""
+    fetch_ensembl_data_filename: "{{ retrieve_annotation_data_ensembl_species_name }}.{{ retrieve_annotation_data_ensembl_genome_name }}.{{ retrieve_annotation_data_ensembl_release_version }}.gtf.gz"
+    fetch_ensembl_data_destdir: "{{ retrieve_annotation_data_species_release_data_path }}"
