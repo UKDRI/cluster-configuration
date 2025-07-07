@@ -11,13 +11,11 @@
 - name: Configure /etc/slurm/slurmdbd.conf
   block:
 
+    # For whatever reasons, using file does not exists, there may be some tricks to generate the symlink
     - name: Create slurmdbd.conf from example file
-      ansible.builtin.copy:
-        src: /etc/slurm/slurmdbd.conf.example
-        dest: "/sched/{{ configure_slurmdb_cluster_name }}/slurmdbd.conf"
-        mode: '0600'
-        owner: 'slurm'
-        group: 'slurm'
+      ansible.builtin.command:
+        cmd: "sudo cp /etc/slurm/slurmdbd.conf.example /sched/{{ configure_slurmdb_cluster_name }}/slurmdbd.conf"
+        creates: "/sched/{{ configure_slurmdb_cluster_name }}/slurmdbd.conf"
       when: ('/sched', cluster_name, 'slurmdbd.conf') | path_join | string is not exists
 
     - name: Create slurmdbd.conf symlink in /etc/slurm
