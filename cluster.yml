@@ -64,6 +64,7 @@
             ansible.builtin.include_role:
               name: configure_slurmdb
             vars:
+              configure_slurmdb_cluster_name: "{{ cluster_name }}"
               configure_slurmdb_password: "{{ slurmdb_password }}"
 
           - name: Configure MySQL
