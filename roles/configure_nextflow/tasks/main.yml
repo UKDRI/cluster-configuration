@@ -1,5 +1,12 @@
 ---
 
+- name: Create Nextflow config directory
+  ansible.builtin.file:
+    name: "{{ configure_nextflow_config_path }}"
+    state: directory
+    mode: "775"
+    group: "cyclecloud"
+
 - name: Copy Nextflow config file
   ansible.builtin.copy:
     src: "files/config"
