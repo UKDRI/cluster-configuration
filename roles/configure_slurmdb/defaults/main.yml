@@ -18,6 +18,8 @@ configure_slurmdb_slurmdbd_conf:
     value: "{{ configure_slurmdb_mysql_port }}"
   - name: 'StoragePass'
     value: "{{ configure_slurmdb_password | quote }}"
+  - name: 'PidFile'
+    value: '/var/run/slurmdbd/slurmdbd.pid'
 
 configure_slurmdb_var_directories:
   - "/var/log/slurm"
