@@ -73,17 +73,9 @@
             vars:
               configure_mysql_slurm_password: "{{ slurmdb_password }}"
 
-          - name: Restart SlurmDBD
-            ansible.builtin.systemd:
-              name: "slurmdbd"
-              state: "restarted"
-            become: true
-
-          - name: Restart SlurmCtl
-            ansible.builtin.systemd:
-              name: "slurmctld"
-              state: "restarted"
-            become: true
+          - name: Restart Slurm Daemons
+            ansible.builtin.include_role:
+              name: restart_slurm
 
         - name: Configure and get shared data files
           ansible.builtin.include_role:

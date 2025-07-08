@@ -21,6 +21,8 @@
       ansible.builtin.systemd:
         name: 'mariadb'
         state: "restarted"
+      register: mariadb_systemctl
+      failed_when: mariadb_systemctl.status.ActiveState != "active"
   become: true
 
 - name: Get root MySQL password
