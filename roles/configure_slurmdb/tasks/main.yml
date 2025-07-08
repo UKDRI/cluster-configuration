@@ -18,6 +18,13 @@
         creates: "/sched/{{ configure_slurmdb_cluster_name }}/slurmdbd.conf"
       when: ('/sched', cluster_name, 'slurmdbd.conf') | path_join | string is not exists
 
+    - name: Set ownership to slurm for slurmdbd.conf in /sched
+      ansible.builtin.file:
+        path: "/sched/{{ configure_slurmdb_cluster_name }}/slurmdbd.conf"
+        owner: 'slurm'
+        group: 'slurm'
+        state: file
+
     - name: Create slurmdbd.conf symlink in /etc/slurm
       ansible.builtin.file:
         src: "/sched/{{ configure_slurmdb_cluster_name }}/slurmdbd.conf"
