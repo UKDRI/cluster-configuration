@@ -12,6 +12,15 @@ usually a sample sheet, and an output directory.
 The nf-core documentation is usually very good, so if you want to know more about
 the pipeline or see if there is a parameter which could help you just open [this](https://nf-co.re/)
 
+If you copy the `config` file found with the params file to your `.nextflow` folder,
+you can use profiles instead of config file: `-profile cluster,rnaseq` for the
+rnaseq pipeline.
+
+- `cluster`: It sets the limits and should be used for all pipelines run on the HPC
+- `rnaseq`
+- `differentialabundance`
+- `scrnaseq`
+
 
 ### Bulk RNA-seq pipeline
 
@@ -150,7 +159,7 @@ nextflow run nf-core/scrnaseq -r 4.0.0 -c /shared/data/nextflow/scrnaseq.config 
 
 ## Configuring a nextflow pipeline
 
-If you are preparing a new 
+If you are preparing a new nf-core pipeline, you should follow the following steps.
 
 
 ### Preparing the config files
