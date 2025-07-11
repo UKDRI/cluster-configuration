@@ -40,6 +40,10 @@
           ansible.builtin.include_role:
             name: install_software
 
+        - name: Install helper scripts
+          ansible.builtin.include_role:
+            name: install_helper_scripts
+
         - name: Add UK DRI users to docker group
           ansible.builtin.include_role:
             name: add_users_to_docker
