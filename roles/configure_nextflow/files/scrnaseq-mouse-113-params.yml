@@ -1,0 +1,8 @@
+---
+
+fasta: "/shared/data/genomes/GRCm39/Mus_musculus.GRCm39.dna.primary_assembly.fa"
+gtf: "/shared/data/genomes/GRCm39/113/Mus_musculus.GRCm39.112.gtf"
+simpleaf_index: "/shared/data/genomes/GRCm39/113/simpleaf_index/index"
+#star_index: "/shared/data/genomes/GRCm39/113/star_index"
+#kallisto_index: "/shared/data/genomes/GRCm39/113/kallisto_index"
+#cellranger_index: "/shared/data/genomes/GRCm39/113/cellranger_index"

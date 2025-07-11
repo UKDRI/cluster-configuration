@@ -1,6 +1,0 @@
----
-
-fasta: "/shared/data/genomes/GRCm39/Mus_musculus.GRCm39.dna.primary_assembly.fa"
-gtf: "/shared/data/genomes/GRCm39/110/Mus_musculus.GRCm39.110.gtf"
-star_index: "/shared/data/genomes/GRCm39/110/star"
-salmon_index: "/shared/data/genomes/GRCm39/110/salmon"

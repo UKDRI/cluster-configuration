@@ -1,5 +1,0 @@
----
-
-gtf: "/shared/data/genomes/GRCm39/110/Mus_musculus.GRCm39.110.gtf"
-gprofiler2_run: true
-gene_sets_files: "/shared/data/genomes/GRCm39/110/gprofiler_full_mmusculus.ENSG.gmt"

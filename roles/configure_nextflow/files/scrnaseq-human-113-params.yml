@@ -1,0 +1,8 @@
+---
+
+fasta: "/shared/data/genomes/GRCh38/Homo_sapiens.GRCh38.dna.primary_assembly.fa"
+gtf: "/shared/data/genomes/GRCh38/113/Homo_sapiens.GRCh38.112.gtf"
+simpleaf_index: "/shared/data/genomes/GRCh38/113/simpleaf_index/index"
+#star_index: "/shared/data/genomes/GRCh38/113/star_index"
+#kallisto_index: "/shared/data/genomes/GRCh38/113/kallisto_index"
+#cellranger_index: "/shared/data/genomes/GRCh38/113/cellranger_index"
