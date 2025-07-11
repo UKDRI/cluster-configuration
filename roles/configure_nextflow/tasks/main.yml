@@ -16,7 +16,7 @@
   vars:
     config_files: "{{ query('fileglob', 'files/*.config') }}"
   
-- name: Copy parameter files
+- name: Copy workflow config files
   ansible.builtin.copy:
     src: "{{ item }}"
     dest: "{{ configure_nextflow_config_path }}/{{ item | basename }}"
@@ -25,7 +25,7 @@
     backup: true
   with_fileglob: "files/*.config"
   
-- name: Copy workflow config files
+- name: Copy parameter files
   ansible.builtin.copy:
     src: "{{ item }}"
     dest: "{{ configure_nextflow_config_path }}/{{ item | basename }}"
