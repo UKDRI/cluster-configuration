@@ -1,0 +1,29 @@
+plugins {
+    id 'nf-boost'
+}
+
+boost {
+    cleanup = true
+}
+
+profiles {
+    {# The cluster config should be the first in the file, I did not find a better way than these two loops #}
+    {%- for config_file in config_files if 'cluster.config' in config_file %}
+
+    {{ config_file | split('/') | last | split('.') | first }} {
+        includeConfig "{{ configure_nextflow_config_path }}/{{ config_file | split('/') | last }}"
+    }
+
+
+    {%- endfor %}
+
+
+    {%- for config_file in config_files if 'cluster.config' not in config_file %}
+
+    {{ config_file | split('/') | last | split('.') | first }} {
+        includeConfig "{{ configure_nextflow_config_path }}/{{ config_file | split('/') | last }}"
+    }
+
+    {%- endfor %}
+
+}

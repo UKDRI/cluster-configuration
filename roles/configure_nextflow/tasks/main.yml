@@ -8,12 +8,13 @@
     group: "cyclecloud"
 
 - name: Copy Nextflow config file
-  ansible.builtin.copy:
-    src: "files/config"
+  ansible.builtin.template:
+    src: "templates/config.j2"
     dest: "{{ configure_nextflow_config_path }}/config"
-    group: "cyclecloud"
-    mode: "664"
-    backup: true
+    mode: '0664'
+    group: 'cyclecloud'
+  vars:
+    config_files: "{{ query('fileglob', 'files/*.config') }}"
   
 - name: Copy parameter files
   ansible.builtin.copy:
