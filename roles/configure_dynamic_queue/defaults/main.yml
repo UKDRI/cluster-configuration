@@ -1,0 +1,19 @@
+---
+
+configure_dynamic_partition_suffix: "dyn"
+configure_dynamic_partition_node_type:
+  - name: "Standard_F2s_V2"
+    cpus: 2
+    quantity: 10
+  - name: "Standard_F4s_V2"
+    cpus: 4
+    quantity: 10
+  - name: "Standard_F16s_V2"
+    cpus: 16
+    quantity: 8
+  - name: "Standard_F32s_V2"
+    cpus: 32
+    quantity: 5
+  - name: "Standard_F48s_V2"
+    cpus: 48
+    quantity: 3
