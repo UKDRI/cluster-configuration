@@ -54,12 +54,28 @@ default Java
 We are using Nextflow version 24.10.0 which is installed in `/usr/local/bin`.
 
 
+### Add configuration files
+
+It copies the set of config files and parameters files for Nextflow in the directory
+specified, default is `/shared/data/nextflow`.
+
+It will also create a configuration files which can be copied in `.nextflow`. It
+will allow the use of `-profile` when running nextflow
+
 ### Install everyday software
 
 Currently we install the following list of software which can be expanded:
 
 - vim
 - screen
+
+
+### Install helper scripts
+
+These would be written in-house to help do stuff on the HPC, installed in `/usr/local/bin`.
+
+- addicp.sh: A script to copy data to the ADDI workbench. It creates an MD5 checksum
+    file which is also copied in order to verify the files copied
 
 
 ### Add UK DRI users to the docker group
@@ -84,3 +100,28 @@ able to create databases.
 ### Restart the daemons
 
 It will restart `slurmdbd` and `slurmctl` and the system will be ready to use!!
+
+
+### Fetch genome data
+
+We are fetching the reference assembly for human and mouse and the GTF files associated
+with a set of releases.
+
+We also download the GMT files needed for g:Profiler. If the release used in the
+GMT file is not present in the set of releases, it will be added.
+
+
+## Implementation choices
+
+I made the choice of having all variables in the `defaults/main.yml` of each roles.
+I wanted to avoid to have to look at multiple files to find the variable.
+
+The Nextflow configuration and params files are not using templates. I thought they
+could be used from the repository directly and be modified more easily than a template.
+
+The playbook needs to be run locally because:
+
+- it only needs to be run on the scheduler node
+- the ip adress changes every reboot so the inventory would have to change every
+    reboot
+- SSH access and vault would need to be configured and password to be shared
