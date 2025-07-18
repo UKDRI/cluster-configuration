@@ -9,9 +9,9 @@
 
 - name: Get annotation GTF file
   ansible.builtin.include_role:
-    name: "fetch_ensembl_data"
+    name: 'fetch_ensembl_data'
   vars:
-    fetch_ensembl_data_release: "release-{{ retrieve_annotation_data_ensembl_release_version }}"
+    fetch_ensembl_data_release: "release-{{ ensembl_release_version }}"
     fetch_ensembl_data_species_name: "{{ retrieve_genome_data_species_name | lower }}"
     fetch_ensembl_data_filetype: "gtf"
     fetch_ensembl_data_datatype: ""

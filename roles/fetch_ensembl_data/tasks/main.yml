@@ -1,6 +1,7 @@
 ---
 
 - name: Download Ensembl data from FTP
+  when: ( fetch_ensembl_data_destdir, fetch_ensembl_data_filename ) | path_join | splitext | first | string is not exists
   block:
     - name: Create temporary directory
       ansible.builtin.tempfile:
@@ -11,13 +12,14 @@
       ansible.builtin.get_url:
         url: "{{ fetch_ensembl_data_url | path_join }}"
         dest: "{{ fetch_ensembl_data_tmpdir.path }}"
+        mode: '660'
 
     - name: Unzip Ensembl file
       ansible.builtin.command:
         cmd: "gunzip {{ fetch_ensembl_data_tmpdir.path }}/{{ fetch_ensembl_data_filename }}"
         removes: "{{ fetch_ensembl_data_tmpdir.path }}/{{ fetch_ensembl_data_filename }}"
         creates: "{{ fetch_ensembl_data_tmpdir.path }}/{{ fetch_ensembl_data_filename | splitext | first }}"
-    
+
     - name: Copy Ensembl file to shared location
       ansible.builtin.copy:
         src: "{{ fetch_ensembl_data_tmpdir.path }}/{{ fetch_ensembl_data_filename | splitext | first }}"

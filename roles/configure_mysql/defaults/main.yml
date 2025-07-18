@@ -5,7 +5,7 @@ configure_mysql_dbport: 3306
 configure_mysql_sheduler_name: "{{ scheduler_id }}"
 configure_mysql_slurm_user: 'slurm'
 configure_mysql_packages:
-  - "mariadb-server"
+  - 'mariadb-server'
 configure_mysql_buffer_pool_size: 4096
 
 configure_mysql_server_variables:
@@ -14,7 +14,7 @@ configure_mysql_server_variables:
   - name: innodb_lock_wait_timeout
     value: '1024M'
   - name: innodb_log_file_size
-    value: "{{ ( configure_mysql_buffer_pool_size / 4 / 2 ) | int }}M" # We want to get 25% and divide by innodb_log_files_in_group
+    value: "{{ (configure_mysql_buffer_pool_size / 4 / 2) | int }}M" # We want to get 25% and divide by innodb_log_files_in_group
   - name: max_allowed_packet
     value: '1024M'
 

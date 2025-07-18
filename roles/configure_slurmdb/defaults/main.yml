@@ -3,7 +3,7 @@
 configure_slurmdb_sheduler_name: "{{ scheduler_id }}"
 configure_slurmdb_mysql_port: "{{ mysql_dbport }}"
 
-configure_slurmdbd_accounting_conf:
+configure_slurmdb_accounting_conf:
   - name: 'AccountingStorageType'
     value: 'accounting_storage/slurmdbd'
   - name: 'JobCompType'
@@ -22,5 +22,5 @@ configure_slurmdb_slurmdbd_conf:
     value: '/var/run/slurmdbd/slurmdbd.pid'
 
 configure_slurmdb_var_directories:
-  - "/var/log/slurm"
-  - "/var/run/slurmdbd"
+  - '/var/log/slurm'
+  - '/var/run/slurmdbd'

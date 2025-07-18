@@ -9,6 +9,7 @@
   ansible.builtin.get_url:
     url: "{{ retrieve_genome_data_gprofiler_root }}/api/util/data_versions?organism={{ retrieve_genome_data_gprofiler_species_name }}"
     dest: "{{ retrieve_genome_data_gprofiler_temp_dir.path }}/gprofiler_databases_versions.json"
+    mode: '600'
 
 - name: Get gProfiler data versions
   ansible.builtin.include_vars:
@@ -17,25 +18,25 @@
 
 - name: Set Ensembl releases
   ansible.builtin.set_fact:
-    ensembl_releases: "{{ [ retrieve_genome_data_gprofiler_versions.biomart_version | int, retrieve_genome_data_ensembl_releases ] | flatten | unique | list }}"
+    ensembl_releases: "{{ [retrieve_genome_data_gprofiler_versions.biomart_version | int, retrieve_genome_data_ensembl_releases] | flatten | unique | list }}"
 
 - name: Create assembly version directory
   ansible.builtin.file:
     name: "{{ retrieve_genome_data_root_path }}/{{ retrieve_genome_data_genome_version }}"
-    state: "directory"
-    group: "cyclecloud"
-    mode: "775"
-    
+    state: 'directory'
+    owner: 'root'
+    group: 'root'
+    mode: '775'
+
 - name: Get genome file
   ansible.builtin.include_role:
-    name: "fetch_ensembl_data"
+    name: 'fetch_ensembl_data'
   vars:
-    fetch_ensembl_data_release: "current"
+    fetch_ensembl_data_release: 'current'
     fetch_ensembl_data_species_name: "{{ retrieve_genome_data_species_name | lower }}"
-    fetch_ensembl_data_datatype: "dna"
+    fetch_ensembl_data_datatype: 'dna'
     fetch_ensembl_data_filename: "{{ retrieve_genome_data_species_name }}.{{ retrieve_genome_data_genome_version }}.dna.primary_assembly.fa.gz"
     fetch_ensembl_data_destdir: "{{ retrieve_genome_data_root_path }}/{{ retrieve_genome_data_genome_version }}"
-    
 
 - name: Release specific data
   ansible.builtin.include_role:
@@ -54,6 +55,9 @@
   ansible.builtin.get_url:
     url: "{{ retrieve_genome_data_gprofiler_root }}/static/gprofiler_full_{{ retrieve_genome_data_gprofiler_species_name }}.ENSG.gmt"
     dest: "{{ retrieve_genome_data_root_path }}/{{ retrieve_genome_data_genome_version }}/{{ retrieve_genome_data_gprofiler_versions.biomart_version }}"
+    owner: 'root'
+    group: 'root'
+    mode: '664'
   # when: (retrieve_genome_data_root_path, retrieve_genome_data_genome_version, retrieve_genome_data_gprofiler_versions.biomart_version)
 
 # This needs to happen after the download of the Ensembl files to have the release directory present
@@ -66,5 +70,7 @@
 
 # - name: Warning about new release added
 #   ansible.builtin.debug:
-#     msg: "WARNING: gProfiler uses Ensembl release {{ retrieve_genome_data_gprofiler_versions.biomart_version }} which is not in your list. You must update the default variables file"
+#     msg: >
+#       WARNING: gProfiler uses Ensembl release {{ retrieve_genome_data_gprofiler_versions.biomart_version }} which is not in your list.
+#       You must update the default variables file
 #   when: (ensembl_releases | lentgh) != (configure_shared_data_ensembl_releases | length)

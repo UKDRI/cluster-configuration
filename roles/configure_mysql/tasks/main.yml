@@ -11,19 +11,17 @@
     - name: Configure MySQL server variables
       ansible.builtin.lineinfile:
         path: /etc/my.cnf.d/mariadb-server.cnf
-        regex: '^#? {{ item.name }}='
+        regex: "^#? {{ item.name }}="
         line: "{{ item.name }}={{ item.value }}"
         insertafter: 'pid-file'
       loop: "{{ configure_mysql_server_variables }}"
-      become: true
 
     - name: Start MySQL service
       ansible.builtin.systemd:
         name: 'mariadb'
-        state: "restarted"
+        state: 'restarted'
       register: mariadb_systemctl
-      failed_when: mariadb_systemctl.status.ActiveState != "active"
-  become: true
+      failed_when: mariadb_systemctl.status.ActiveState != 'active'
 
 - name: Get root MySQL password
   ansible.builtin.set_fact:

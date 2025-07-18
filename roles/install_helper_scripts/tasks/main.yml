@@ -3,9 +3,9 @@
 - name: Install script locally
   ansible.builtin.copy:
     src: "{{ item }}"
-    dest: "/usr/local/bin"
-    mode: "775"
-    owner: "root"
-    group: "root"
+    dest: '/usr/local/bin'
+    mode: '775'
+    owner: 'root'
+    group: 'root'
   loop: "{{ query('fileglob', 'files/*') }}"
   become: true

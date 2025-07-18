@@ -21,12 +21,14 @@
         url: "https://github.com/nextflow-io/nextflow/releases/download/v{{ install_nextflow_version }}/nextflow"
         checksum: "{{ install_nextflow_checksum }}"
         dest: "{{ temp_download_dir.path }}"
-        mode: "0600"
+        mode: '0600'
 
 
     - name: "Copy nextflow binary to {{ install_nextflow_bin_path }}"
       ansible.builtin.copy:
         dest: "{{ install_nextflow_exe }}"
         src: "{{ temp_download_dir.path }}/nextflow"
-        mode: "0755"
+        owner: 'root'
+        group: 'root'
+        mode: '0755'
       become: true

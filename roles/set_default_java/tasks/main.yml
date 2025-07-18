@@ -3,7 +3,7 @@
 - name: Install Java 17 if not present
   ansible.builtin.dnf:
     name: "{{ set_default_java_yum_package_name }}"
-    state: "present"
+    state: 'present'
     install_weak_deps: false
   become: true
 

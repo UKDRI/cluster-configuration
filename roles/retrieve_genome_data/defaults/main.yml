@@ -6,4 +6,4 @@ retrieve_genome_data_root_path: "/shared/data/genomes"
 retrieve_genome_data_ensembl_releases:
   - 113
 
-retrieve_genome_data_gprofiler_root: "https://biit.cs.ut.ee/gprofiler"
+retrieve_genome_data_gprofiler_root: 'https://biit.cs.ut.ee/gprofiler'

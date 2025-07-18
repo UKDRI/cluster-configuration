@@ -1,9 +1,9 @@
 ---
 
 configure_shared_data_species_list:
-  - name: "Mus_musculus"
-    version: "GRCm39"
-    gprofiler_name: "mmusculus"
-  - name: "Homo_sapiens"
-    version: "GRCh38"
-    gprofiler_name: "hsapiens"
+  - name: 'Mus_musculus'
+    version: 'GRCm39'
+    gprofiler_name: 'mmusculus'
+  - name: 'Homo_sapiens'
+    version: 'GRCh38'
+    gprofiler_name: 'hsapiens'
