@@ -1,35 +1,70 @@
 ---
 
-- name: Create Nextflow config directory
-  ansible.builtin.file:
-    name: "{{ configure_nextflow_config_path }}"
+- name: Create temporary Nextflow home
+  ansible.builtin.tempfile:
     state: directory
-    mode: "775"
-    group: "cyclecloud"
+  register: configure_nextflow_tempdir
 
-- name: Copy Nextflow config file
-  ansible.builtin.template:
-    src: "templates/config.j2"
-    dest: "{{ configure_nextflow_config_path }}/config"
-    mode: '0664'
-    group: 'cyclecloud'
-  vars:
-    config_files: "{{ query('fileglob', 'files/*.config') }}"
-  
-- name: Copy workflow config files
-  ansible.builtin.copy:
-    src: "{{ item }}"
-    dest: "{{ configure_nextflow_config_path }}/{{ item | basename }}"
-    group: "cyclecloud"
-    mode: "664"
-    backup: true
-  with_fileglob: "files/*.config"
-  
-- name: Copy parameter files
-  ansible.builtin.copy:
-    src: "{{ item }}"
-    dest: "{{ configure_nextflow_config_path }}/{{ item | basename }}"
-    group: "cyclecloud"
-    mode: "664"
-    backup: true
-  with_fileglob: "files/*-params.yml"
+- name: Pull the pipelines
+  ansible.builtin.command:
+    cmd: "nextflow pull {{ item.name }} -r {{ item.version }}"
+  loop: "{{ configure_nextflow_pipelines_list }}"
+  register: configure_nextflow_pull
+  changed_when: configure_nextflow_pull.rc != 0
+  environment:
+    NXF_HOME: "{{ configure_nextflow_tempdir.path }}"
+
+- name: Configure Nextflow
+  become: true
+  block:
+
+    - name: Create Nextflow home directory
+      ansible.builtin.copy:
+        src: "{{ configure_nextflow_tempdir.path }}"
+        dest: "{{ configure_nextflow_base_path }}"
+        owner: 'root'
+        group: 'root'
+        directory_mode: '755'
+        mode: '664'
+
+    - name: Create nextflow-config modulefile
+      ansible.builtin.template:
+        src: 'templates/nextflow-config.j2'
+        dest: "{{ configure_nextflow_module_path }}/nextflow-config"
+        owner: 'root'
+        group: 'root'
+        mode: '0664'
+
+    - name: Create Nextflow config directory
+      ansible.builtin.file:
+        name: "{{ configure_nextflow_config_path }}"
+        state: directory
+        owner: 'root'
+        group: 'root'
+        mode: '775'
+
+    - name: Copy Nextflow config file
+      ansible.builtin.template:
+        src: 'templates/config.j2'
+        dest: "{{ configure_nextflow_base_path }}/config"
+        owner: 'root'
+        group: 'root'
+        mode: '0664'
+      vars:
+        config_files: "{{ query('fileglob', 'files/*.config') }}"
+
+    - name: Copy workflow config files
+      ansible.builtin.copy:
+        src: "{{ item }}"
+        dest: "{{ configure_nextflow_config_path }}/{{ item | basename }}"
+        owner: 'root'
+        group: 'root'
+        mode: '664'
+        backup: true
+      with_fileglob: 'files/*.config'
+
+    - name: Create parameters files
+      ansible.builtin.include_role:
+        name: nextflow_parameter_file
+      vars:
+        nextflow_parameter_file_config_path: "{{ configure_nextflow_config_path }}"

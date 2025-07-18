@@ -1,5 +1,0 @@
----
-
-gtf: "/shared/data/genomes/GRCh38/113/Homo_sapiens.GRCh38.110.gtf"
-gprofiler2_run: true
-gene_sets_files: "/shared/data/genomes/GRCh38/113/gprofiler_full_hsapiens.ENSG.gmt"

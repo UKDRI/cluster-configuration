@@ -1,0 +1,46 @@
+#%Module1.0
+#
+# Copyright UKDRI
+#
+# This software and the related documents are Intel copyrighted materials, and
+# your use of them is governed by the express license under which they were
+# provided to you (License). Unless the License provides otherwise, you may
+# not use, modify, copy, publish, distribute, disclose or transmit this
+# software or the related documents without Intel's prior written permission.
+#
+# This software and the related documents are provided as is, with no express
+# or implied warranties, other than those that are expressly stated in the
+# License.
+#
+##############################################################################
+##
+## UK DRI Nextflow configuration modulefile
+
+set min_tcl_ver 8.4
+if { $tcl_version < $min_tcl_ver } {
+    puts stderr ' '
+    puts stderr 'ERROR: This modulefile requires tcl $min_tcl_ver or greater.'
+    puts stderr 'Your system reports that tclsh version $tcl_version is installed.'
+    exit 1
+}
+
+# ###### Component Specific env vars setup ###################################
+
+module-whatis 'Name: UK DRI Nextflow configuration'
+module-whatis 'Version: nextflow-config/1.0.0'
+module-whatis 'Description: UK DRI Nextflow configuration'
+module-whatis 'URL: https://github.com/UKDRI/cluster-configuration'
+module-whatis 'Dependencies: none'
+
+proc ModulesHelp { } {
+    puts 'module whatis ${moduleinfoname}'
+    puts 'echo 'If NXF_HOME is set it will be overwritten, save it somewhere''
+}
+
+set     topdir             "{{ configure_nextflow_base_path }}"
+set     shareddir             "{{ configure_nextflow_shared_path }}"
+setenv  NEXTFLOW_BASEPATH  '$topdir/nextflow'
+setenv  NEXTFLOW_GENOMES   '$shareddir/genomes'
+setenv  NEXTFLOW_RAWDATA   '$shareddir/data'
+
+setenv  NXF_HOME          '$topdir/nextflow'

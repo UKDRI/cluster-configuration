@@ -1,3 +1,13 @@
 ---
 
-configure_nextflow_config_path: "/shared/data/nextflow"
+configure_nextflow_base_path: /opt/nextflow
+configure_nextflow_config_path: "{{ shared_data_root }}/nextflow"
+configure_nextflow_module_path: /usr/share/Modules/modulefiles
+
+configure_nextflow_pipelines_list:
+  - name: nf-core/rnaseq
+    version: 3.19.0
+  - name: nf-core/differentialabundance
+    version: 1.5.0
+  - name: nf-core/scrnaseq
+    version: 4.0.0

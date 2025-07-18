@@ -1,6 +1,0 @@
----
-
-fasta: "/shared/data/genomes/GRCh38/Homo_sapiens.GRCh38.dna.primary_assembly.fa"
-gtf: "/shared/data/genomes/GRCh38/113/Homo_sapiens.GRCh38.113.gtf"
-# star_index: "/shared/data/genomes/GRCh38/113/star"
-# salmon_index: "/shared/data/genomes/GRCh38/113/salmon"

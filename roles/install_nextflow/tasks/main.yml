@@ -10,6 +10,15 @@
   when: install_nextflow_exe != which_result.stdout
   block:
 
+    - name: Create Nextflow root folder
+      ansible.builtin.file:
+        path: "{{ install_nextflow_bin_path }}"
+        state: directory
+        owner: 'root'
+        group: 'root'
+        mode: '775'
+      become: true
+
     - name: Create temporary directory
       ansible.builtin.tempfile:
         state: directory

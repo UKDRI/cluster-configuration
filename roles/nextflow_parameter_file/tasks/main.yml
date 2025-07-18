@@ -1,0 +1,33 @@
+---
+
+- name: Get list of species
+  ansible.builtin.include_vars:
+    file: '../../retrieve_genome_data/defaults/main.yml'
+    name: ensembl_information
+
+- name: Get list of releases
+  ansible.builtin.include_vars:
+    file: '../../configure_shared_data/defaults/main.yml'
+    name: species_information
+
+# This is a bit ugly. If I could use loop on a block, I could have made something
+# nicer. I am creating an 'object' which has all the data needed for the templates
+# but I could not make a nice dictionary or nested list.
+- name: Create parameter files
+  ansible.builtin.template:
+    src: "{{ item[1] }}"
+    dest: "{{ nextflow_parameter_file_config_path }}/{{ item[1] | basename | split('-') | first }}-{{ (item[0][0].name == 'Homo_sapiens') | ternary('human', 'mouse') }}-{{ item[0][1] }}-params.yml" # noqa: yaml[line-length]
+    mode: '644'
+  when: >
+    (nextflow_parameter_file_config_path,
+    (((item[1] | basename | split('-') | first), ((item[0][0].name == 'Homo_sapiens') | ternary('human', 'mouse')), item[0][1], 'params.yml') | join('-'))) |
+    path_join | string is not exists
+  vars:
+    ensembl_release: "{{ item[0][1] }}"
+    species_name: "{{ item[0][0].name }}"
+    genome_version: "{{ item[0][0].version }}"
+    gprofiler_species_name: "{{ item[0][0].gprofiler_name }}"
+    shared_genome_data_path: "{{ ensembl_information.retrieve_genome_data_root_path }}"
+  loop: >
+    {{ species_information.configure_shared_data_species_list | product(ensembl_information.retrieve_genome_data_ensembl_releases) |
+    product(query('fileglob', 'templates/*.j2')) }}
