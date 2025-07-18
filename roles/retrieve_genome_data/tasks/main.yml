@@ -65,8 +65,9 @@
   ansible.builtin.copy:
     src: "{{ retrieve_genome_data_gprofiler_temp_dir.path }}/gprofiler_databases_versions.json"
     dest: "{{ retrieve_genome_data_root_path }}/{{ retrieve_genome_data_genome_version }}/{{ retrieve_genome_data_gprofiler_versions.biomart_version }}"
-    mode: "664"
-    group: "cyclecloud"
+    owner: 'root'
+    group: 'root'
+    mode: '664'
 
 # - name: Warning about new release added
 #   ansible.builtin.debug:

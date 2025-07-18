@@ -1,6 +1,6 @@
 ---
 
-retrieve_genome_data_root_path: "/shared/data/genomes"
+retrieve_genome_data_root_path: "{{ shared_data_path }}/genomes"
 
 # It might be best to follow gProfiler version so it is not out of sync
 retrieve_genome_data_ensembl_releases:
