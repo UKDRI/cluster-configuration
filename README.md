@@ -7,12 +7,13 @@ Slurm accounting on an Azure CycleCloud pipeline using AlmaLinux
 
 ## Requirements
 
-Ansible needs to be installed with pip. Ansible is provided by AlmaLinux but the
-dnf module used to install packages needs the system Python (3.6) and Ansible is
-packaged with Python 3.12.
+You will need `ansible-core`. It can be install via the package manager or pip.
+However, the dnf module used to install packages needs the system Python (3.6) and
+Ansible is packaged with Python 3.12 on AlmaLinux.
 
-There is a script in `bin` which will install `ansible-core` and `ansible-lint`
-to be able to check the YAML files when modifying the roles.
+There is a script in `bin` which will install `ansible-core` with `dnf`. If you would
+like to be able to install `ansible-lint` to be able to check the YAML files when
+modifying the roles, you would need to install it via `pip`.
 
 
 ## Configuring the cluster
@@ -30,6 +31,47 @@ You can also just run the playbook
 ```bash
 ansible-playbook cluster-configuration.yml
 ```
+
+
+## Updating the cluster
+
+### Adding a new Ensembl release
+
+You should add the numerical release version of Ensembl to the file `roles/retrieve_genome_data/defaults/main.yml`
+
+
+### Adding a new pipeline
+
+You should add the name of the pipeline and the version to use to `roles/configure_nextflow/defaults/main.yml`.
+
+You should create two new files:
+
+- resource configuration file: `roles/configure_nextflow/files/<name of the pipeline>.config`,
+    you should use an existing one as template.
+- parameters file: `roles/nextflow_parameter_file/templates/<name of the pipeline>.j2`,
+    you should use an existing one as template and check the documentation for the
+    pipeline to know which parameters are static.
+
+### Adding a new user to the docker group
+
+Currently any user with a uid between 20006 and 30000 is added to the group. The
+test can be modified in `roles/get_users/defaults/main.yml`
+
+
+### Installing new software
+
+We currently install a limited set of softwares to the HPC as nf-core is using containers
+for the pipelines. If any software is needed, the list should be updated in `roles/install_software/defaults/main.yml`.
+
+
+### Modify the path for the shared data
+
+If the shared data is to moved somewhere, you should modify the file `group_vars/all`.
+
+
+### To modify anything else
+
+You should look in the files `roles/*/defaults/main.yml`.
 
 
 ## Steps of the configuration
@@ -53,14 +95,6 @@ default Java
 
 We are using Nextflow version 24.10.0 which is installed in `/usr/local/bin`.
 
-
-### Add configuration files
-
-It copies the set of config files and parameters files for Nextflow in the directory
-specified, default is `/shared/data/nextflow`.
-
-It will also create a configuration files which can be copied in `.nextflow`. It
-will allow the use of `-profile` when running nextflow
 
 ### Install everyday software
 
@@ -93,7 +127,7 @@ A random password is created and used to generate the configuration files
 ### Configuring MariaDB
 
 It install MariaDB and creates a password for root only accessible to the creator
-of the database. It also create a "slurm" user with password. The slurm user is
+of the database. It also create a 'slurm' user with password. The slurm user is
 able to create databases.
 
 
@@ -111,6 +145,17 @@ We also download the GMT files needed for g:Profiler. If the release used in the
 GMT file is not present in the set of releases, it will be added.
 
 
+### Add configuration files
+
+It downloads all the pipelines listed for central use.
+
+It copies the set of config files and parameters files for Nextflow in the directory
+specified, default is `/shared/data/nextflow`.
+
+It will also create a configuration files which is accessible by using `module load nextflow-config`
+and allow for the use or `-profile`.
+
+
 ## Implementation choices
 
 I made the choice of having all variables in the `defaults/main.yml` of each roles.
@@ -125,3 +170,24 @@ The playbook needs to be run locally because:
 - the ip adress changes every reboot so the inventory would have to change every
     reboot
 - SSH access and vault would need to be configured and password to be shared
+
+If you would like to run the playbook from your laptop, you can create an inventory
+file like this:
+
+```yaml
+---
+
+azure_hpc:
+  hosts:
+    scheduler:
+      ansible_connection: ssh
+      ansible_host: <current IP address>
+      ansible_user: <your user name>
+      ansible_ssh_private_key_file: ~/.ssh/<passwordless ssh private key file>
+```
+
+And you can run it with:
+
+```bash
+ansible-playbook -i <name of your inventory> cluster-configuration.yml
+```

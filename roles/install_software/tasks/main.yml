@@ -1,6 +1,6 @@
 ---
 
-- name: "Install softwares"
+- name: Install softwares
   ansible.builtin.dnf:
     name: "{{ install_software_list }}"
     state: 'present'
