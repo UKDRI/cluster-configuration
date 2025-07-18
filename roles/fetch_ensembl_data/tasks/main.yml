@@ -24,6 +24,7 @@
       ansible.builtin.copy:
         src: "{{ fetch_ensembl_data_tmpdir.path }}/{{ fetch_ensembl_data_filename | splitext | first }}"
         dest: "{{ fetch_ensembl_data_destdir }}"
-        mode: "664"
-        group: "cyclecloud"
-  when: ( fetch_ensembl_data_destdir, fetch_ensembl_data_filename ) | path_join | splitext | first | string is not exists
+        owner: 'root'
+        group: 'root'
+        mode: '664'
+      become: true
