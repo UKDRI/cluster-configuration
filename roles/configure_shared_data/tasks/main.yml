@@ -10,3 +10,12 @@
   loop: "{{ configure_shared_data_species_list }}"
   loop_control:
     loop_var: species_info
+
+- name: Create folder for raw data
+  ansible.builtin.file:
+    path: "{{ shared_data_directory }}/data"
+    state: directory
+    owner: 'root'
+    group: 'cyclecloud'
+    mode: '775'
+  become: true
