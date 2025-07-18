@@ -1,0 +1,4 @@
+---
+
+shared_data_path: /shared/data
+mysql_dbport: 3306

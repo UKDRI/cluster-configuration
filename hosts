@@ -4,5 +4,3 @@ azure_hpc:
   hosts:
     localhost:
       ansible_connection: local
-  vars:
-    mysql_dbport: 3306
