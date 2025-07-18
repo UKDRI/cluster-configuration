@@ -3,5 +3,7 @@
 - name: "Install softwares"
   ansible.builtin.dnf:
     name: "{{ install_software_list }}"
-    state: "present"
+    state: 'present'
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
   become: true

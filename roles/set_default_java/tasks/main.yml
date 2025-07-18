@@ -5,6 +5,8 @@
     name: "{{ set_default_java_yum_package_name }}"
     state: 'present'
     install_weak_deps: false
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
   become: true
 
 - name: Retrieve Java version

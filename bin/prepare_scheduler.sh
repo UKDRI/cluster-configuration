@@ -1,5 +1,5 @@
 #!/usr/bin/bash
 
-python3 -m pip install ansible-core ansible-lint
+sudo dnf install -y ansible-core
 
 ansible-playbook cluster.yml
