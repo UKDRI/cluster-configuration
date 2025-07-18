@@ -28,7 +28,7 @@ The script will install the dependencies and run ansible-playbook.
 You can also just run the playbook
 
 ```bash
-ansible-playbook cluster.yml
+ansible-playbook cluster-configuration.yml
 ```
 
 

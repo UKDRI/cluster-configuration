@@ -2,8 +2,8 @@
 
 - name: Prepare cluster for compute
   hosts: all
-  tasks:
 
+  tasks:
     - name: Get cluster config
       ansible.builtin.command:
         cmd: scontrol show config
@@ -16,12 +16,12 @@
       loop: "{{ scontrol_show_config.stdout_lines }}"
       when: "'ClusterName' in item"
 
-    - name: Get cluster name
+    - name: Set cluster name
       ansible.builtin.set_fact:
         scheduler_id: "{{ (cluster_name, 'scheduler') | join('-') }}"
 
     - name: "Install software on {{ scheduler_id }}"
-      when: ansible_facts["hostname"] == scheduler_id
+      when: ansible_facts['hostname'] == scheduler_id
       block:
 
         - name: Set default Java for Nextflow
@@ -31,10 +31,6 @@
         - name: Install Nextflow
           ansible.builtin.include_role:
             name: install_nextflow
-
-        - name: Configure Nextflow
-          ansible.builtin.include_role:
-            name: configure_nextflow
 
         - name: Install softwares
           ansible.builtin.include_role:
@@ -54,33 +50,46 @@
           ignore_errors: true
           changed_when: is_sacct_enabled.rc != 0
           register: is_sacct_enabled
-        
+
         - name: Configure Slurm Accounting
           when: is_sacct_enabled.rc == 1
           block:
 
-          - name: Create new SlurmDB password
-            ansible.builtin.set_fact:
-              slurmdb_password: "{{ lookup('ansible.builtin.password', '/dev/null', chars=['ascii_letters', 'digits']) }}"
-            when: slurmdb_password is not defined
+            - name: Create new SlurmDB password
+              ansible.builtin.set_fact:
+                slurmdb_password: "{{ lookup('ansible.builtin.password', '/dev/null', chars=['ascii_letters', 'digits']) }}"
+              when: slurmdb_password is not defined
 
-          - name: Configure SlurmDBD
-            ansible.builtin.include_role:
-              name: configure_slurmdb
-            vars:
-              configure_slurmdb_cluster_name: "{{ cluster_name }}"
-              configure_slurmdb_password: "{{ slurmdb_password }}"
+            - name: Configure SlurmDBD
+              ansible.builtin.include_role:
+                name: configure_slurmdb
+              vars:
+                configure_slurmdb_cluster_name: "{{ cluster_name }}"
+                configure_slurmdb_password: "{{ slurmdb_password }}"
 
-          - name: Configure MySQL
-            ansible.builtin.include_role:
-              name: configure_mysql
-            vars:
-              configure_mysql_slurm_password: "{{ slurmdb_password }}"
+            - name: Configure MySQL
+              ansible.builtin.include_role:
+                name: configure_mysql
+              vars:
+                configure_mysql_slurm_password: "{{ slurmdb_password }}"
 
-          - name: Restart Slurm Daemons
-            ansible.builtin.include_role:
-              name: restart_slurm
+            - name: Restart Slurm Daemons
+              ansible.builtin.include_role:
+                name: restart_slurm
+
+        - name: Create shared data root folder
+          ansible.builtin.file:
+            path: "{{ shared_data_path }}"
+            state: directory
+            owner: 'root'
+            group: 'root'
+            mode: '775'
+          become: true
 
         - name: Configure and get shared data files
           ansible.builtin.include_role:
             name: configure_shared_data
+
+        - name: Configure Nextflow
+          ansible.builtin.include_role:
+            name: configure_nextflow

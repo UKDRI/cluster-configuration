@@ -2,4 +2,4 @@
 
 sudo dnf install -y ansible-core
 
-ansible-playbook cluster.yml
+ansible-playbook cluster-configuration.yml
