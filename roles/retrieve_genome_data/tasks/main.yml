@@ -27,6 +27,7 @@
     owner: 'root'
     group: 'root'
     mode: '775'
+  become: true
 
 - name: Get genome file
   ansible.builtin.include_role:
@@ -51,23 +52,24 @@
     loop_var: ensembl_release
 
 # This needs to happen after the download of the Ensembl files to have the release directory present
-- name: Get gProfiler GMT file
-  ansible.builtin.get_url:
-    url: "{{ retrieve_genome_data_gprofiler_root }}/static/gprofiler_full_{{ retrieve_genome_data_gprofiler_species_name }}.ENSG.gmt"
-    dest: "{{ retrieve_genome_data_root_path }}/{{ retrieve_genome_data_genome_version }}/{{ retrieve_genome_data_gprofiler_versions.biomart_version }}"
-    owner: 'root'
-    group: 'root'
-    mode: '664'
-  # when: (retrieve_genome_data_root_path, retrieve_genome_data_genome_version, retrieve_genome_data_gprofiler_versions.biomart_version)
+- name: Get the gProfiler files
+  when: (retrieve_genome_data_root_path, retrieve_genome_data_genome_version, retrieve_genome_data_gprofiler_versions.biomart_version) | path_join is not exists
+  block:
 
-# This needs to happen after the download of the Ensembl files to have the release directory present
-- name: Copy gProfiler data versions
-  ansible.builtin.copy:
-    src: "{{ retrieve_genome_data_gprofiler_temp_dir.path }}/gprofiler_databases_versions.json"
-    dest: "{{ retrieve_genome_data_root_path }}/{{ retrieve_genome_data_genome_version }}/{{ retrieve_genome_data_gprofiler_versions.biomart_version }}"
-    owner: 'root'
-    group: 'root'
-    mode: '664'
+    - name: Get gProfiler GMT file
+      ansible.builtin.get_url:
+        url: "{{ retrieve_genome_data_gprofiler_root }}/static/gprofiler_full_{{ retrieve_genome_data_gprofiler_species_name }}.ENSG.gmt"
+        dest: "{{ retrieve_genome_data_gprofiler_temp_dir.path }}/gprofiler_full_{{ retrieve_genome_data_gprofiler_species_name }}.ENSG.gmt"
+        mode: '600'
+
+    - name: Copy gProfiler data to the release folder
+      ansible.builtin.copy:
+        src: "{{ retrieve_genome_data_gprofiler_temp_dir.path }}/"
+        dest: "{{ retrieve_genome_data_root_path }}/{{ retrieve_genome_data_genome_version }}/{{ retrieve_genome_data_gprofiler_versions.biomart_version }}"
+        owner: 'root'
+        group: 'root'
+        mode: '664'
+      become: true
 
 # - name: Warning about new release added
 #   ansible.builtin.debug:
