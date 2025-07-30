@@ -13,7 +13,7 @@
 
 - name: Create folder for raw data
   ansible.builtin.file:
-    path: "{{ shared_data_directory }}/data"
+    path: "{{ shared_data_path }}/data"
     state: directory
     owner: 'root'
     group: 'cyclecloud'
