@@ -1,0 +1,18 @@
+---
+
+- name: Restart SystemD service
+  ansible.builtin.systemd:
+    name: "{{ restart_service_name }}"
+    state: 'restarted'
+  register: systemctl_service
+  failed_when: systemctl_service.status.ActiveState == 'failed'
+  become: true
+
+- name: Check service is active
+  ansible.builtin.command:
+    cmd: "systemctl is-active {{ restart_service_name }}"
+  register: is_active_check
+  until: is_active_check.rc == 0
+  retries: 5
+  delay: 10
+

@@ -1,17 +1,9 @@
 ---
 
-- name: Restart SlurmDBD
-  ansible.builtin.systemd:
-    name: 'slurmdbd'
-    state: 'restarted'
-  register: slurmdbd_systemctl
-  failed_when: slurmdbd_systemctl.status.ActiveState != 'active'
-  become: true
+- name: Restart Slurm service
+  ansible.builtin.include_role:
+    name: restart_service
+  vars:
+    restart_service_name: "{{ item }}"
+  loop: "{{ restart_slurm_services }}"
 
-- name: Restart SlurmCtlD
-  ansible.builtin.systemd:
-    name: 'slurmctld'
-    state: 'restarted'
-  register: slurmctld_systemctl
-  failed_when: slurmctld_systemctl.status.ActiveState != 'active'
-  become: true

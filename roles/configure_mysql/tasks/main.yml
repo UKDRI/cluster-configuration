@@ -18,11 +18,10 @@
       loop: "{{ configure_mysql_server_variables }}"
 
     - name: Start MySQL service
-      ansible.builtin.systemd:
-        name: 'mariadb'
-        state: 'restarted'
-      register: mariadb_systemctl
-      failed_when: mariadb_systemctl.status.ActiveState != 'active'
+      ansible.builtin.include_role:
+        name: restart_service
+      vars:
+        restart_service_name: 'mariadb'
 
 - name: Get root MySQL password
   ansible.builtin.set_fact:

@@ -1,0 +1,6 @@
+---
+
+restart_slurm_services:
+  - slurmdbd
+  - slurmctld
+
