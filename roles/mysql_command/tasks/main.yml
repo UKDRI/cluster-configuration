@@ -8,3 +8,4 @@
       -e "{{ mysql_command_cmd | join(';') }}"
   register: mysql_command_out
   changed_when: mysql_command_out.stdout in 'Query OK'
+  ignore_errors: "{{ mysql_command_ignore_errors | default(false) }}"

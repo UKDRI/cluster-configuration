@@ -36,9 +36,10 @@
     mysql_command_user: 'root'
     mysql_command_host: "{{ configure_mysql_host }}"
     mysql_command_port: "{{ configure_mysql_dbport }}"
-    mysql_command_cmd: 'SHOW DATABASES'
+    mysql_command_cmd:
+      - 'SHOW DATABASES'
+    mysql_command_ignore_errors: true
   register: mysql_command_has_password
-  ignore_errors: true
 
 - name: Configure root user
   ansible.builtin.include_role:
