@@ -13,6 +13,7 @@
   changed_when: configure_nextflow_pull.rc != 0
   environment:
     NXF_HOME: "{{ configure_nextflow_tempdir.path }}"
+    PATH: "/opt/nextflow/bin:{{ ansible_env.PATH }}"
 
 - name: Configure Nextflow
   become: true
@@ -20,12 +21,12 @@
 
     - name: Create Nextflow home directory
       ansible.builtin.copy:
-        src: "{{ configure_nextflow_tempdir.path }}"
+        src: "{{ configure_nextflow_tempdir.path }}/"
         dest: "{{ configure_nextflow_base_path }}"
         owner: 'root'
-        group: 'root'
+        group: 'cyclecloud'
         directory_mode: '755'
-        mode: '664'
+        mode: '644'
 
     - name: Create nextflow-config modulefile
       ansible.builtin.template:
@@ -34,6 +35,23 @@
         owner: 'root'
         group: 'root'
         mode: '0664'
+
+    - name: Make Nextflow shared folders writeable for group cyclcloud
+      ansible.builtin.file:
+        path: "{{ configure_nextflow_base_path }}/{{ item }}"
+        owner: 'root'
+        group: 'cyclecloud'
+        mode: '775'
+      loop: "{{ configure_nextflow_writeable_folders }}"
+
+    - name: Set pipeline scripts executable
+      ansible.builtin.file:
+        path: "{{ configure_nextflow_base_path }}/{{ item.name }}/bin"
+        owner: 'root'
+        group: 'cyclecloud'
+        mode: '755'
+      loop: "{{ configure_nextflow_pipelines_list }}"
+      when: (configure_nextflow_base_path, item.name, bin) | path_join is exists
 
     - name: Create Nextflow config directory
       ansible.builtin.file:

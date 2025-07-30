@@ -1,8 +1,12 @@
 ---
 
-configure_nextflow_base_path: /opt/nextflow
-configure_nextflow_config_path: "{{ shared_data_root }}/nextflow"
+configure_nextflow_base_path: "{{ shared_data_path }}/nextflow"
+configure_nextflow_config_path: "{{ shared_data_path }}/nextflow"
 configure_nextflow_module_path: /usr/share/Modules/modulefiles
+
+configure_nextflow_writeable_folders:
+  - plugins
+  - tmp
 
 configure_nextflow_pipelines_list:
   - name: nf-core/rnaseq
