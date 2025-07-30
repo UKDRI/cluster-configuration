@@ -37,10 +37,12 @@ proc ModulesHelp { } {
     puts 'echo 'If NXF_HOME is set it will be overwritten, save it somewhere''
 }
 
-set     topdir             "{{ configure_nextflow_base_path }}"
-set     shareddir             "{{ configure_nextflow_shared_path }}"
-setenv  NEXTFLOW_BASEPATH  '$topdir/nextflow'
-setenv  NEXTFLOW_GENOMES   '$shareddir/genomes'
-setenv  NEXTFLOW_RAWDATA   '$shareddir/data'
+set          topdir             "{{ configure_nextflow_base_path }}"
+set          shareddir          "{{ shared_data_path }}"
+setenv       NEXTFLOW_BASEPATH  $topdir
+setenv       NEXTFLOW_GENOMES   $shareddir/genomes
+setenv       NEXTFLOW_RAWDATA   $shareddir/data
 
-setenv  NXF_HOME          '$topdir/nextflow'
+setenv       NXF_HOME           $topdir
+
+prepend-path PATH               $topdir/bin
