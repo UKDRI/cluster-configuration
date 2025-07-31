@@ -2,5 +2,5 @@
 
 install_nextflow_version: '24.10.0'
 install_nextflow_checksum: 'sha1:c142828a82fa6678a5af978d3545bb7f56072be6'
-install_nextflow_bin_path: '/opt/nextflow/bin'
+install_nextflow_bin_path: "{{ nextflow_root_path }}/bin"
 install_nextflow_exe: "{{ install_nextflow_bin_path }}/nextflow"

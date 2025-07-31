@@ -1,4 +1,5 @@
 ---
 
 shared_data_path: /shared/data
+nextflow_root_path: /opt/nextflow
 mysql_dbport: 3306

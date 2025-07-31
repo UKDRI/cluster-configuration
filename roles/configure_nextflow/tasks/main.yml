@@ -13,7 +13,7 @@
   changed_when: configure_nextflow_pull.rc != 0
   environment:
     NXF_HOME: "{{ configure_nextflow_tempdir.path }}"
-    PATH: "/opt/nextflow/bin:{{ ansible_env.PATH }}"
+    PATH: "{{ nextflow_root_path }}/bin:{{ ansible_env.PATH }}"
 
 - name: Configure Nextflow
   become: true
@@ -36,7 +36,7 @@
         group: 'root'
         mode: '0664'
 
-    - name: Make Nextflow shared folders writeable for group cyclcloud
+    - name: Make Nextflow shared folders writeable for group cyclecloud
       ansible.builtin.file:
         path: "{{ configure_nextflow_base_path }}/{{ item }}"
         owner: 'root'
