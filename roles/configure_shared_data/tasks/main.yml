@@ -17,5 +17,5 @@
     state: directory
     owner: 'root'
     group: 'cyclecloud'
-    mode: '775'
+    mode: '2775'
   become: true
