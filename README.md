@@ -47,10 +47,11 @@ You should add the name of the pipeline and the version to use to `roles/configu
 You should create two new files:
 
 - resource configuration file: `roles/configure_nextflow/files/<name of the pipeline>.config`,
-    you should use an existing one as template.
+you should use an existing one as template.
 - parameters file: `roles/nextflow_parameter_file/templates/<name of the pipeline>.j2`,
-    you should use an existing one as template and check the documentation for the
-    pipeline to know which parameters are static.
+you should use an existing one as template and check the documentation for the pipeline
+to know which parameters are static.
+
 
 ### Adding a new user to the docker group
 
@@ -109,7 +110,7 @@ Currently we install the following list of software which can be expanded:
 These would be written in-house to help do stuff on the HPC, installed in `/usr/local/bin`.
 
 - addicp.sh: A script to copy data to the ADDI workbench. It creates an MD5 checksum
-    file which is also copied in order to verify the files copied
+file which is also copied in order to verify the files copied
 
 
 ### Add UK DRI users to the docker group

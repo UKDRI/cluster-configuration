@@ -12,24 +12,23 @@ usually a sample sheet, and an output directory.
 The nf-core documentation is usually very good, so if you want to know more about
 the pipeline or see if there is a parameter which could help you just open [this](https://nf-co.re/)
 
-If you copy the `config` file found with the params file to your `.nextflow` folder,
-you can use profiles instead of config file: `-profile cluster,rnaseq` for the
-rnaseq pipeline.
+The different profile availables, cluster should always be used:
 
 - `cluster`: It sets the limits and should be used for all pipelines run on the HPC
 - `rnaseq`
 - `differentialabundance`
 - `scrnaseq`
 
+To be able to use the profiles, you need to use `module load nextflow-config`
+
 
 ### Bulk RNA-seq pipeline
 
 - nf-core documentation: [nf-core/rnaseq](https://nf-co.re/rnaseq/3.18.0/)
-- version: 3.18.0
+- version: 3.19.0
 
 It was decided to use STAR and Salmon to align the reads and do the quantification
-as the results can be used with the [differentialabundance|Differential-expression-go-enrichment]
-pipeline.
+as the results can be used with the differentialabundance pipeline.
 
 
 #### Preparing the samplesheet CSV file (`--input`)
@@ -45,7 +44,8 @@ sample2,/path/to/sample2_1.fq.gz,/path/to/sample2_2.fq.gz,auto
 #### Running the pipeline
 
 ```bash
-nextflow run nf-core/rnaseq -r 3.18.0 -c /shared/data/nextflow/rnaseq.config -params-file /shared/data/nextflow/rnaseq-mouse-110-params.yml --input samplesheet.csv --outdir rnaseq
+module load nextflow-config
+nextflow run nf-core/rnaseq -r 3.19.0 -profile cluster,rnaseq -params-file /shared/data/nextflow/rnaseq-mouse-110-params.yml --input samplesheet.csv --outdir rnaseq
 ```
 
 
@@ -111,7 +111,8 @@ The GMT file is provided through the params file.
 #### Running the pipeline
 
 ```bash
-nextflow run nf-core/differentialabundance -r 1.5.0 -c /shared/data/nextflow/differentialabundance.config -params-file /shared/data/nextflow/differentialabundance-mouse-110-params.yml --input differentialabundance.csv --matrix rnaseq/star_salmon/salmon.merged.gene_counts.tsv --transcript_length_matrix rnaseq/star_salmon/salmon.merged.gene_lengths.tsv --contrasts contrasts.csv --outdir differentialabundance
+module load nextflow-config
+nextflow run nf-core/differentialabundance -r 1.5.0 -profile cluster,differentialabundance -params-file /shared/data/nextflow/differentialabundance-mouse-110-params.yml --input differentialabundance.csv --matrix rnaseq/star_salmon/salmon.merged.gene_counts.tsv --transcript_length_matrix rnaseq/star_salmon/salmon.merged.gene_lengths.tsv --contrasts contrasts.csv --outdir differentialabundance
 ```
 
 
@@ -153,7 +154,8 @@ sample. There is no simple options and all require manual intervention. The opti
 #### Running the pipeline
 
 ```bash
-nextflow run nf-core/scrnaseq -r 4.0.0 -c /shared/data/nextflow/scrnaseq.config -params-file /shared/data/nextflow/scrnaseq-human-112-params.yml --input samplesheet.csv --protocol 10XV2 --outdir scrnaseq
+module load nextflow-config
+nextflow run nf-core/scrnaseq -r 4.0.0 -profile cluster,scrnaseq -params-file /shared/data/nextflow/scrnaseq-human-112-params.yml --input samplesheet.csv --protocol 10XV2 --outdir scrnaseq
 ```
 
 
