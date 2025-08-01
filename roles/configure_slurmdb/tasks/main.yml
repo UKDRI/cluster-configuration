@@ -38,8 +38,9 @@
     - name: Configure slurm.conf
       ansible.builtin.lineinfile:
         path: /etc/slurm/slurm.conf
-        regex: '^#?JobAcctGatherType='
-        line: 'JobAcctGatherType=jobacct_gather/cgroup'
+        regex: "^#?{{ item.name }}="
+        line: "{{ item.name }}={{ item.value }}"
+      loop: "{{ configure_slurmdb_slurm_conf }}"
 
     - name: Configure slurmdbd.conf
       ansible.builtin.lineinfile:

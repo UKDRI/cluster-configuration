@@ -3,6 +3,30 @@
 configure_slurmdb_sheduler_name: "{{ scheduler_id }}"
 configure_slurmdb_mysql_port: "{{ mysql_dbport }}"
 
+configure_slurmdb_slurm_conf:
+  - name: 'JobAcctGatherType'
+    value: 'jobacct_gather/linux'
+  - name: 'PriorityWeightAge'
+    value: 1000
+  - name: 'PriorityWeightFairshare'
+    value: 10000
+  - name: 'PriorityWeightJobSize'
+    value: 1000
+  - name: 'PriorityWeightPartition'
+    value: 1000
+  - name: 'PriorityWeightQOS'
+    value: 0
+  - name: 'PriorityType'
+    value: 'priority/multifactor'
+  - name: 'PriorityDecayHalfLife'
+    value: '7-0'
+  - name: 'PriorityFavorSmall'
+    value: 'YES'
+  - name: 'PriorityFlags'
+    value: 'SMALL_RELATIVE_TO_TIME'
+  - name: 'PriorityMaxAge'
+    value: '7-0'
+
 configure_slurmdb_accounting_conf:
   - name: 'AccountingStorageType'
     value: 'accounting_storage/slurmdbd'
